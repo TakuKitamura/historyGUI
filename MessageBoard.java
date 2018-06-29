@@ -9,6 +9,8 @@ import java.lang.ProcessBuilder;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import javafx.scene.input.KeyCode;
+
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.GridPane;
@@ -33,6 +35,41 @@ import java.lang.Runtime;
 
 
 public class MessageBoard extends Application {
+
+  private String getCommandInput(ProcessBuilder pb) {
+    try {
+      // Runtime runtime = Runtime.getRuntime();
+      // runtime.exec(execCommand);
+      Process p = pb.start();
+
+      // p.waitFor();
+      // System.out.println(pb.redirectInput());
+      // System.out.println(123);
+
+      try (BufferedReader br = new BufferedReader(
+        new InputStreamReader(p.getInputStream(), "UTF-8"))) {
+        // ping結果の出力
+
+        StringBuilder sb = new StringBuilder();
+
+        String line;
+
+        while ((line = br.readLine()) != null) {
+          sb.append(line + "\n");
+        }
+
+        String input = sb.toString();
+
+        return input;
+
+        // manual.setText(manOutput);
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      return "";
+    }
+  }
+
   @Override
   public void start(Stage stage) {
 
@@ -52,7 +89,7 @@ public class MessageBoard extends Application {
 
     category.setOnMouseClicked((mouseEvent) -> {
        String categoryName = category.getSelectionModel().getSelectedItem().toString();
-       System.out.println(categoryName);
+       // System.out.println(categoryName);
     });
 
     Label caregoryLbl = new Label("カテゴリー");
@@ -84,50 +121,53 @@ public class MessageBoard extends Application {
 
     ListView<String> command = new ListView<>(commands);
 
-    command.setPrefSize(400, 1000);
-
     TextArea manual = new TextArea();
+    TextArea cli = new TextArea();
+
     command.setOnMouseClicked((mouseEvent) -> {
-       String execCommand = "man -P cat " + command.getSelectionModel().getSelectedItem().toString() + " | col -b 2>&1";
-       System.out.println(execCommand);
+      // selectCommand = command.getSelectionModel().getSelectedItem().toString();
+      String selectCommand = command.getSelectionModel().getSelectedItem().toString();
+      String execCommand = "man -P cat " + selectCommand + " | col -b 2>&1";
+      // System.out.println(execCommand);
 
-       ProcessBuilder pb = new ProcessBuilder("/bin/sh", "-c" , execCommand);
-       pb = pb.redirectErrorStream(true);
+      cli.setText("$ " + selectCommand);
 
-       try {
-          // Runtime runtime = Runtime.getRuntime();
-          // runtime.exec(execCommand);
-          Process p = pb.start();
+      ProcessBuilder pb = new ProcessBuilder("/bin/sh", "-c" , execCommand);
 
-          System.out.println(000);
+      // pb = pb.redirectErrorStream(true);
+      //
+      // try {
+      //   // Runtime runtime = Runtime.getRuntime();
+      //   // runtime.exec(execCommand);
+      //   Process p = pb.start();
 
-          // p.waitFor();
-          System.out.println(pb.redirectInput());
-          System.out.println(123);
+        // p.waitFor();
+        // System.out.println(pb.redirectInput());
+        // System.out.println(123);
 
-          try (BufferedReader br = new BufferedReader(
-            new InputStreamReader(p.getInputStream(), "UTF-8"))) {
-            // ping結果の出力
+        // try (BufferedReader br = new BufferedReader(
+        //   new InputStreamReader(p.getInputStream(), "UTF-8"))) {
+        //   // ping結果の出力
+        //
+        //   StringBuilder sb = new StringBuilder();
+        //
+        //   String line;
+        //
+        //   while ((line = br.readLine()) != null) {
+        //     sb.append(line + "\n");
+        //   }
 
-            StringBuilder sb = new StringBuilder();
+          // String manOutput = sb.toString();
 
-            String line;
+      //     manual.setText(manOutput);
+      //   }
+      // } catch (IOException e) {
+      //   e.printStackTrace();
+      // }
 
-            System.out.println(456);
+      String manOutput = getCommandInput(pb);
 
-            while ((line = br.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-
-            System.out.println(789);
-
-            String manOutput = sb.toString();
-
-            manual.setText(manOutput);
-          }
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
+      manual.setText(manOutput);
     });
 
 
@@ -147,11 +187,43 @@ public class MessageBoard extends Application {
     manualSelection.setSpacing(10);
     manualSelection.getChildren().addAll(manual);
 
-    TextArea cli = new TextArea();
     cli.setPrefSize(800, 450);
+    cli.setText("$");
     VBox cliSelection = new VBox();
     cliSelection.setSpacing(10);
     cliSelection.getChildren().addAll(cli);
+
+    cli.setOnKeyPressed(
+    (event) -> {
+      if(event.getCode() == KeyCode.ENTER) {
+        // System.out.println(command.getSelectionModel().getSelectedItem());
+
+        String selectCommand = command.getSelectionModel().getSelectedItem();
+
+        // for (String line : cli.getText().split("\\n")) {
+          String[] lineAry = cli.getText().split("\\n");
+          String lastCommand = lineAry[lineAry.length-1];
+          System.out.println(lastCommand);
+          String execCommand = lastCommand.replaceAll("^\\$ ", "");
+          System.out.println(execCommand);
+          ProcessBuilder pb = new ProcessBuilder("/bin/sh", "-c" , execCommand);
+          String output = "\n" + getCommandInput(pb);
+          cli.appendText(output);
+          // break;
+        // }
+
+        if(selectCommand == null) {
+           cli.setText("$ ");
+        } else {
+          cli.appendText("$ " + selectCommand);
+          event.consume();
+          // cli.positionCaret(4);
+          // cli.consume();
+        }
+        // cli.setText("$" + selectCommand);
+        // System.out.println(55555);
+      }
+    });
 
     // searchBoxSelection.getChildren().add(searchBox);
     VBox rightSelection = new VBox();
