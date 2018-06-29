@@ -4,7 +4,12 @@ import javafx.scene.Scene;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Screen;
+import javafx.geometry.Pos;
+import java.lang.ProcessBuilder;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.GridPane;
 
@@ -34,8 +39,8 @@ public class MessageBoard extends Application {
     ObservableList<String> categories =
       FXCollections.<String>observableArrayList(
         "利用率順",
-        "覚えるの大変順",
-        "覚えるの簡単順",
+        "覚えるのが大変順",
+        "覚えるのが簡単順",
         "新しい順",
         "高機能なコマンド順",
         "利用可能なコマンド順",
@@ -43,6 +48,7 @@ public class MessageBoard extends Application {
       );
 
     ListView<String> category = new ListView<>(categories);
+    category.setPrefSize(150, 1000);
 
     category.setOnMouseClicked((mouseEvent) -> {
        String categoryName = category.getSelectionModel().getSelectedItem().toString();
@@ -52,7 +58,7 @@ public class MessageBoard extends Application {
     Label caregoryLbl = new Label("カテゴリー");
     VBox categorySelection = new VBox();
     categorySelection.setSpacing(10);
-    categorySelection.getChildren().addAll(caregoryLbl, category);
+    categorySelection.getChildren().addAll(category);
 
     ObservableList<String> commands = FXCollections.observableArrayList();
     try {
@@ -78,23 +84,79 @@ public class MessageBoard extends Application {
 
     ListView<String> command = new ListView<>(commands);
 
-    command.setPrefSize(200, 1000);
+    command.setPrefSize(400, 1000);
+
+    TextArea manual = new TextArea();
     command.setOnMouseClicked((mouseEvent) -> {
-       String execCommand = command.getSelectionModel().getSelectedItem().toString();
+       String execCommand = "man -P cat " + command.getSelectionModel().getSelectedItem().toString() + " | col -b 2>&1";
        System.out.println(execCommand);
-       // try {
-       //    Runtime runtime = Runtime.getRuntime();
-       //    runtime.exec(execCommand);
-       //  } catch (IOException e) {
-       //    e.printStackTrace();
-       //  }
+
+       ProcessBuilder pb = new ProcessBuilder("/bin/sh", "-c" , execCommand);
+       pb = pb.redirectErrorStream(true);
+
+       try {
+          // Runtime runtime = Runtime.getRuntime();
+          // runtime.exec(execCommand);
+          Process p = pb.start();
+
+          System.out.println(000);
+
+          // p.waitFor();
+          System.out.println(pb.redirectInput());
+          System.out.println(123);
+
+          try (BufferedReader br = new BufferedReader(
+            new InputStreamReader(p.getInputStream(), "UTF-8"))) {
+            // ping結果の出力
+
+            StringBuilder sb = new StringBuilder();
+
+            String line;
+
+            System.out.println(456);
+
+            while ((line = br.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+
+            System.out.println(789);
+
+            String manOutput = sb.toString();
+
+            manual.setText(manOutput);
+          }
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
     });
 
+
+    TextField searchBox = new TextField ();
+    searchBox.setPromptText("コマンド検索");
 
     Label commandLbl = new Label("コマンド");
     VBox commandSelection = new VBox();
     commandSelection.setSpacing(10);
-    commandSelection.getChildren().addAll(commandLbl, command);
+    commandSelection.getChildren().addAll(searchBox, command);
+
+    // TextArea manual = new TextArea();
+    manual.setText("a\nb");
+    manual.setEditable(false);
+    manual.setPrefSize(800, 450);
+    VBox manualSelection = new VBox();
+    manualSelection.setSpacing(10);
+    manualSelection.getChildren().addAll(manual);
+
+    TextArea cli = new TextArea();
+    cli.setPrefSize(800, 450);
+    VBox cliSelection = new VBox();
+    cliSelection.setSpacing(10);
+    cliSelection.getChildren().addAll(cli);
+
+    // searchBoxSelection.getChildren().add(searchBox);
+    VBox rightSelection = new VBox();
+    rightSelection.setSpacing(10);
+    rightSelection.getChildren().addAll(manual, cli);
 
     GridPane pane = new GridPane();
 
@@ -105,6 +167,19 @@ public class MessageBoard extends Application {
     pane.addColumn(0, categorySelection);
 
     pane.addColumn(1, commandSelection);
+
+    pane.addColumn(2, rightSelection);
+
+    // pane.addColumn(3, commandPathSelection);
+    //
+    // pane.addColumn(4, manual);
+    //
+    // pane.addColumn(5, cli);
+
+    // pane.add(manualSelection, 0, 1);
+    // pane.add(child, columnIndex, rowIndex);
+
+    // pane.addRow(0, commandPathSelection);
 
 
     pane.setStyle("-fx-padding: 10;" +
