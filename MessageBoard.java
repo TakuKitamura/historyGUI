@@ -1,32 +1,21 @@
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Screen;
-import javafx.geometry.Pos;
 import java.lang.ProcessBuilder;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import javafx.collections.transformation.FilteredList;
-
 import javafx.scene.input.KeyCode;
-
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.GridPane;
-
-import javafx.geometry.Rectangle2D;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.ComboBoxListCell;
-import javafx.scene.layout.StackPane;
-
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-
 import java.nio.file.Paths;
 import java.util.List;
 import java.io.IOException;
@@ -39,17 +28,10 @@ public class MessageBoard extends Application {
 
   private String getCommandInput(ProcessBuilder pb) {
     try {
-      // Runtime runtime = Runtime.getRuntime();
-      // runtime.exec(execCommand);
       Process p = pb.start();
-
-      // p.waitFor();
-      // System.out.println(pb.redirectInput());
-      // System.out.println(123);
 
       try (BufferedReader br = new BufferedReader(
         new InputStreamReader(p.getInputStream(), "UTF-8"))) {
-        // ping結果の出力
 
         StringBuilder sb = new StringBuilder();
 
@@ -63,7 +45,6 @@ public class MessageBoard extends Application {
 
         return input;
 
-        // manual.setText(manOutput);
       }
     } catch (IOException e) {
       e.printStackTrace();
@@ -73,8 +54,6 @@ public class MessageBoard extends Application {
 
   @Override
   public void start(Stage stage) {
-
-
 
     ObservableList<String> commands = FXCollections.observableArrayList();
     try {
@@ -100,7 +79,6 @@ public class MessageBoard extends Application {
 
     FilteredList<String> filteredData = new FilteredList<>(commands, s -> true);
 
-
     TextField searchBox = new TextField ();
 
     searchBox.textProperty().addListener(obs-> {
@@ -112,15 +90,7 @@ public class MessageBoard extends Application {
           }
     });
 
-
     ListView<String> command = new ListView<>(filteredData);
-
-    // searchBox.setOnKeyPressed(
-    // (event) -> {
-    //   if(event.getCode() == KeyCode.ENTER) {
-    //
-    //   }
-    // });
 
     TextArea manual = new TextArea();
     TextArea cli = new TextArea();
@@ -168,10 +138,11 @@ public class MessageBoard extends Application {
           String lastCommand = lineAry[lineAry.length-1];
           System.out.println(lastCommand);
           String execCommand = lastCommand.replaceAll("^\\$ ", "");
-          System.out.println(execCommand);
           ProcessBuilder pb = new ProcessBuilder("/bin/sh", "-c" , execCommand);
           String output = "\n" + getCommandInput(pb);
           cli.appendText(output);
+
+          System.out.println(output);
 
         if(selectCommand == null) {
            cli.appendText("$ ");
