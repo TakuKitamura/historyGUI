@@ -48,6 +48,7 @@ agvtool
 alias
 amt
 apachectl
+apfs_hfs_convert
 applesingle
 appletviewer
 apply
@@ -72,6 +73,7 @@ audit
 auditd
 auditreduce
 authserver
+autodiskmount
 automator
 automount
 auval
@@ -270,12 +272,14 @@ diffstat
 dig
 dirname
 diskhits
+disklabel
 disktool
 diskutil
 dispqlen.d
 distnoted
 ditto
 dmc
+dmesg
 dnctl
 dns-sd
 dnsextd
@@ -297,6 +301,7 @@ dtrace
 dtruss
 du
 dwarfdump
+dynamic_pager
 easy_install
 easy_install-2.7
 echo
@@ -306,6 +311,7 @@ egrep
 emacs
 emacs-undumped
 emacsclient
+emond
 enc2xs
 enc2xs5.18
 encode_keychange
@@ -332,6 +338,7 @@ fdesetup
 fdisk
 fg
 fgrep
+fibreconfig
 file
 filebyproc.d
 filecoordinationd
@@ -354,6 +361,18 @@ format-sql
 format-sql5.18
 from
 fs_usage
+fsck
+fsck_apfs
+fsck_cs
+fsck_exfat
+fsck_hfs
+fsck_msdos
+fsck_udf
+fstyp
+fstyp_hfs
+fstyp_msdos
+fstyp_ntfs
+fstyp_udf
 funzip
 fuser
 fwkdp
@@ -402,6 +421,7 @@ h2ph
 h2ph5.18
 h2xs
 h2xs5.18
+halt
 hash
 hdid
 hdik
@@ -438,6 +458,7 @@ id
 idle
 idle2.7
 idlj
+ifconfig
 imptrace
 indent
 indxbib
@@ -517,7 +538,9 @@ kdestroy
 kextcache
 kextfind
 kextlibs
+kextload
 kextstat
+kextunload
 kextutil
 keytool
 kgetcred
@@ -540,6 +563,7 @@ lastcomm
 lastwords
 latency
 launchctl
+launchd
 layerutil
 ld
 ldapadd
@@ -626,6 +650,7 @@ man
 manpath
 mcxquery
 mcxrefresh
+md5
 mddiagnose
 mdfind
 mdimport
@@ -644,6 +669,7 @@ mkextunpack
 mkfifo
 mkfile
 mklocale
+mknod
 mkpassdb
 mktemp
 mmroff
@@ -653,7 +679,25 @@ moo-outdated5.18
 moose-outdated
 moose-outdated5.18
 more
+mount
+mount_acfs
+mount_afp
+mount_apfs
+mount_cd9660
+mount_cddafs
+mount_devfs
+mount_exfat
+mount_fdesc
+mount_ftp
+mount_hfs
+mount_msdos
+mount_nfs
+mount_ntfs
+mount_smbfs
+mount_udf
+mount_webdav
 mp2bug
+mpioutil
 msgs
 mtree
 mv
@@ -681,10 +725,17 @@ netstat
 nettop
 networksetup
 newaliases
+newfs_apfs
+newfs_exfat
+newfs_hfs
+newfs_msdos
+newfs_udf
 newgrp
 newproc.d
 newsyslog
 nfs4mapid
+nfsd
+nfsiod
 nfsstat
 nice
 nl
@@ -692,6 +743,7 @@ nlcontrol
 nm
 nmedit
 nohup
+nologin
 notifyd
 notifyutil
 nroff
@@ -753,6 +805,7 @@ perlivp5.18
 perlthanks
 perlthanks5.18
 pfbtops
+pfctl
 pgrep
 phar
 phar.phar
@@ -766,6 +819,8 @@ piconv
 piconv5.18
 pictd
 pidpersec.d
+ping
+ping6
 pkgbuild
 pkgutil
 pkill
@@ -861,6 +916,7 @@ qlmanage
 qtdefaults
 qtmodernizer
 quota
+quotacheck
 quotaoff
 quotaon
 racoon
@@ -873,6 +929,7 @@ rdoc
 read
 readlink
 rebase
+reboot
 redo_prebinding
 refer
 reject
@@ -889,6 +946,7 @@ rmic
 rmid
 rmiregistry
 rotatelogs
+route
 rpc.lockd
 rpc.statd
 rpcbind
@@ -897,6 +955,7 @@ rpcinfo
 rs
 rsync
 rtadvd
+rtsol
 rtsold
 ruby
 runocc.d
@@ -952,6 +1011,7 @@ shasum
 shasum5.18
 shlock
 showmount
+shutdown
 sigdist.d
 sips
 size
@@ -1126,6 +1186,7 @@ uasysdiagnose
 ul
 ulimit
 umask
+umount
 unalias
 uname
 uncompress
