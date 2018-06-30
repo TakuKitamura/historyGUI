@@ -180,7 +180,7 @@ public class MessageBoard extends Application {
     commandSelection.getChildren().addAll(searchBox, command);
 
     // TextArea manual = new TextArea();
-    manual.setText("a\nb");
+    manual.setText("試すコマンドを選択してください。");
     manual.setEditable(false);
     manual.setPrefSize(800, 450);
     VBox manualSelection = new VBox();
@@ -188,7 +188,7 @@ public class MessageBoard extends Application {
     manualSelection.getChildren().addAll(manual);
 
     cli.setPrefSize(800, 450);
-    cli.setText("$");
+    cli.setText("$ ");
     VBox cliSelection = new VBox();
     cliSelection.setSpacing(10);
     cliSelection.getChildren().addAll(cli);
@@ -213,8 +213,12 @@ public class MessageBoard extends Application {
         // }
 
         if(selectCommand == null) {
-           cli.setText("$ ");
+          // cli.setEditable(false);
+           // cli.setText("試すコマンドを選択してください。");
+           cli.appendText("$ ");
+           event.consume();
         } else {
+          // cli.setEditable(true);
           cli.appendText("$ " + selectCommand);
           event.consume();
           // cli.positionCaret(4);
